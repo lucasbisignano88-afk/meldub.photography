@@ -1,0 +1,9 @@
+# Export d'origine (prototype) — conservé en local, hors dépôt
+_prototype/
+
+# Config locale de l'outillage
+.claude/
+
+# Divers OS / éditeurs
+.DS_Store
+Thumbs.db
