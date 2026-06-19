@@ -189,11 +189,10 @@ function Home() {
             <span className="eyebrow">Qui suis-je</span>
             <h2 className="section-title">Salut, moi<br />c’est Mel.</h2>
             <p>Cavalière avant d’être photographe, je sais ce que c’est d’attendre LA photo de son passage. Alors je me poste au pied de l’obstacle, l’œil dans le viseur, pour attraper l’instant juste : la détente du saut, la complicité, le regard.</p>
-            <p>Je sillonne les concours de la région. Tu réserves ici, je te shoote sur place, et tu reçois tes photos triées et retouchées quelques jours plus tard. Simple, comme une story.</p>
+            <p>Je sillonne les concours de la région. Tu réserves ici, je te shoote sur place, et tu reçois tes photos triées et retouchées. Simple, comme une story.</p>
             <div className="about-stats">
               <div><b>120+</b><span>concours couverts</span></div>
               <div><b>4 ans</b><span>au bord du paddock</span></div>
-              <div><b>48h–5j</b><span>de délai moyen</span></div>
             </div>
           </Reveal>
         </div>
@@ -492,7 +491,7 @@ function Track() {
         ) : (
           <div className="track-wait">
             <Icon name="clock" size={18} />
-            <p>Compte en général <strong>quelques jours après le concours</strong>. Je te préviens dès que c’est en ligne, promis, ça vaut l’attente.</p>
+            <p>Je te préviens dès que c’est en ligne, promis, ça vaut l’attente.</p>
           </div>
         )}
 
