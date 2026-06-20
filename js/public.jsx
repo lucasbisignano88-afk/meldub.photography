@@ -101,7 +101,7 @@ function EventCard({ ev, onBook, delay = 0 }) {
 
 // ── Accueil ───────────────────────────────────────────────────
 function Home() {
-  const { device, events, navigate, route, gallery, hero } = useApp();
+  const { device, events, navigate, route, gallery, hero, concoursCount } = useApp();
   const isMob = device === 'mobile';
   const pub = events.filter(e => e.published && !e.archived);
   const [slide, setSlide] = useState(0);
@@ -183,7 +183,6 @@ function Home() {
         <div className={'about-grid' + (isMob ? ' m' : '')}>
           <Reveal className="about-photo-wrap">
             <Photo src={PHOTOS.mel} label="Mel, photographe" ratio="4 / 5" radius={22} className="about-photo" focus="center 26%" />
-            <span className="about-badge"><Icon name="camera" size={15} /> Toujours au pied de l’obstacle</span>
           </Reveal>
           <Reveal className="about-text" delay={120}>
             <span className="eyebrow">Qui suis-je</span>
@@ -191,8 +190,7 @@ function Home() {
             <p>Cavalière avant d’être photographe, je sais ce que c’est d’attendre LA photo de son passage. Alors je me poste au pied de l’obstacle, l’œil dans le viseur, pour attraper l’instant juste : la détente du saut, la complicité, le regard.</p>
             <p>Je sillonne les concours de la région. Tu réserves ici, je te shoote sur place, et tu reçois tes photos triées et retouchées. Simple, comme une story.</p>
             <div className="about-stats">
-              <div><b>120+</b><span>concours couverts</span></div>
-              <div><b>4 ans</b><span>au bord du paddock</span></div>
+              <div><b>{concoursCount || '120+'}</b><span>concours couverts</span></div>
             </div>
           </Reveal>
         </div>

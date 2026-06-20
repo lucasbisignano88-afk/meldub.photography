@@ -133,6 +133,7 @@ function seed() {
     pricing: JSON.parse(JSON.stringify(DEFAULT_PRICING)),
     gallery: seedGallery(),
     hero: seedHero(),
+    concoursCount: '120+',
   };
 }
 
@@ -265,6 +266,11 @@ function AppProvider({ device, children }) {
     setData(d => ({ ...d, hero: seedHero() }));
   }, []);
 
+  // --- présentation (à propos) ---
+  const setConcoursCount = useCallback((v) => {
+    setData(d => ({ ...d, concoursCount: v }));
+  }, []);
+
   const resetDemo = useCallback(() => { setData(seed()); }, []);
 
   // --- sélecteurs ---
@@ -277,7 +283,7 @@ function AppProvider({ device, children }) {
     addBooking, setBookingStatus, setBookingWetransfer, bulkStatus, addEvent,
     closeEvent, reopenEvent, deleteEvent, updatePricing, resetPricing,
     addGalleryItem, removeGalleryItem, moveGalleryItem, resetGallery,
-    addHeroItem, removeHeroItem, moveHeroItem, resetHero, resetDemo,
+    addHeroItem, removeHeroItem, moveHeroItem, resetHero, setConcoursCount, resetDemo,
     getEvent, getBooking, bookingsFor,
   };
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;

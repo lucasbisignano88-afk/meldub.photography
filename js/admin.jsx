@@ -37,7 +37,7 @@ function AdminLogin() {
 
 // ── Tableau de bord ───────────────────────────────────────────
 function AdminDash() {
-  const { events, bookingsFor, navigate, setAuth, resetDemo } = useApp();
+  const { events, bookingsFor, navigate, setAuth, resetDemo, concoursCount, setConcoursCount } = useApp();
   const active = events.filter(e => !e.archived);
   const archived = events.filter(e => e.archived);
   const totalTodo = active.reduce((n, ev) => n + bookingsFor(ev.id).filter(b => b.status !== 'sent').length, 0);
@@ -89,6 +89,12 @@ function AdminDash() {
           <Btn block size="lg" variant="soft" icon="grid" onClick={() => navigate('admin-gallery')}>Mes photos</Btn>
         </div>
         <p className="dash-hint"><Icon name="sparkle" size={14} /> Publie le concours où tu seras, il apparaît aussitôt sur ton site, prêt à recevoir des réservations.</p>
+
+        <div className="dash-sectitle"><span>Ma présentation</span><i></i></div>
+        <div className="pedit-card">
+          <Field label="Concours couverts" value={concoursCount ?? '120+'} onChange={setConcoursCount}
+                 placeholder="120+" icon="camera" hint="Le chiffre affiché dans « à propos » sur ta page d’accueil." />
+        </div>
 
         <div className="dash-sectitle"><span>En ligne</span><i></i></div>
         <div className="dash-list">
