@@ -475,7 +475,6 @@ function Confirm() {
   const b = getBooking(route.bookingId);
   if (!b) return <Empty onHome={() => navigate('home')} />;
   const ev = getEvent(b.eventId);
-  const link = `melaniedubois.photo/suivi/${b.id}`;
 
   return (
     <Screen onBack={() => navigate('home')} bare>
@@ -484,13 +483,8 @@ function Confirm() {
         <h1 className="confirm-title">C’est réservé&nbsp;!</h1>
         <p className="confirm-lead">Merci {b.firstName}. Je note {b.horse} pour le <strong>{ev?.name}</strong>. On se voit là-bas.</p>
 
-        <div className="confirm-card">
-          <span className="eyebrow">Ton lien personnel, garde-le précieusement</span>
-          <CopyRow value={'https://' + link} display={link} />
-          <p className="confirm-hint">C’est ici que tu suivras l’avancement de tes photos. Pas de compte, pas de mot de passe : juste ce lien.</p>
-        </div>
+        <p className="confirm-hint">Mélanie te recontactera et t’enverra tes photos après le concours.</p>
 
-        <Btn block size="lg" icon="sparkle" onClick={() => navigate('track', { bookingId: b.id })}>Suivre mes photos</Btn>
         <button className="link-btn" onClick={() => navigate('home')}>Retour à l’accueil</button>
       </div>
     </Screen>
