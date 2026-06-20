@@ -1,6 +1,10 @@
 // public.jsx — écrans côté client : Nav, Accueil, Tarifs, Réservation, Confirmation, Suivi
 const { useState, useEffect, useRef } = React;
 
+// Web3Forms : envoie un email à la photographe à chaque demande de réservation.
+// Cette clé est publique (utilisable côté client sans danger).
+const WEB3FORMS_ACCESS_KEY = "6621df39-47f0-4161-8ac4-ff99db5ad86e";
+
 const COVER_LABEL = { saut: 'saut d’obstacles', coeur: 'lifestyle', dressage: 'dressage', cross: 'cross / complet' };
 const IG = 'https://www.instagram.com/melaniedubois_photography/';
 
@@ -375,11 +379,13 @@ function Booking() {
   const ev = getEvent(route.eventId);
   const [f, setF] = useState({ firstName: '', lastName: '', horse: '', slot: '', email: '', contact: '' });
   const [err, setErr] = useState({});
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState('');
   const set = (k) => (v) => setF(s => ({ ...s, [k]: v }));
 
   if (!ev) return <Empty onHome={() => navigate('home')} />;
 
-  const submit = () => {
+  const submit = async () => {
     const e = {};
     if (!f.firstName.trim()) e.firstName = 'Ton prénom, s’il te plaît.';
     if (!f.lastName.trim()) e.lastName = 'Et ton nom.';
@@ -387,8 +393,42 @@ function Booking() {
     if (!f.email.trim() && !f.contact.trim()) e.contact = 'Laisse-moi au moins un moyen de te joindre.';
     setErr(e);
     if (Object.keys(e).length) return;
-    const id = addBooking({ eventId: ev.id, ...f });
-    navigate('confirm', { bookingId: id });
+
+    setSendError('');
+    setSending(true);
+
+    // Notifie la photographe par email via Web3Forms (tous les champs du formulaire).
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          subject: 'Nouvelle demande de réservation – ' + f.firstName + ' ' + f.lastName,
+          from_name: 'Site Mélanie Dubois Photography',
+          prenom: f.firstName,
+          nom: f.lastName,
+          cheval: f.horse,
+          epreuve_ou_heure: f.slot,
+          email: f.email,
+          instagram_ou_telephone: f.contact,
+          concours: ev.name,
+          lieu: ev.place,
+          dates: fmtDates(ev.start, ev.end),
+        }),
+      });
+      const data = await res.json();
+      if (!data || data.success !== true) {
+        throw new Error(data && data.message ? data.message : 'Web3Forms: success !== true');
+      }
+      // Succès : on enregistre la démo locale puis on affiche la confirmation au visiteur.
+      const id = addBooking({ eventId: ev.id, ...f });
+      navigate('confirm', { bookingId: id });
+    } catch (sendErr) {
+      console.error('Échec de l’envoi de la réservation (Web3Forms) :', sendErr);
+      setSending(false);
+      setSendError("L’envoi n’a pas pu aboutir. Vérifie ta connexion et réessaie dans un instant — ou écris-moi directement en message privé Instagram.");
+    }
   };
 
   return (
@@ -417,7 +457,12 @@ function Booking() {
         <Field label="Email" value={f.email} onChange={set('email')} placeholder="camille@email.fr" type="email" icon="mail" />
         <Field label="Instagram ou téléphone" value={f.contact} onChange={set('contact')} placeholder="@camille.eque  ·  06 …" icon="instagram" error={err.contact} />
 
-        <Btn block size="lg" type="submit" iconRight="arrow">Je réserve</Btn>
+        {sendError && (
+          <p className="field-err" style={{ textAlign: 'center', fontSize: 13.5, lineHeight: 1.5 }} role="alert">{sendError}</p>
+        )}
+        <Btn block size="lg" type="submit" iconRight={sending ? null : 'arrow'} disabled={sending}>
+          {sending ? 'Envoi en cours…' : 'Je réserve'}
+        </Btn>
         <p className="form-note"><Icon name="lock" size={14} /> Aucun paiement ici : tu règles sur place, au concours.</p>
       </form>
     </Screen>
