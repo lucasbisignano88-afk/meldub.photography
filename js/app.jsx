@@ -19,6 +19,7 @@ function Router() {
     case 'admin-new':     return <AdminNew />;
     case 'admin-pricing': return <AdminPricing />;
     case 'admin-gallery': return <AdminGallery />;
+    case 'admin-guide':   return <AdminGuide />;
     default:              return <Home />;
   }
 }

@@ -21,6 +21,11 @@ const setAdminPw = (v) => {
   try { localStorage.setItem(ADMIN_PW_KEY, v); } catch (e) {}
 };
 
+// ── Mode d'emploi (guide privé pour la photographe) ───────────
+// À compléter par Lucas : adresse en ligne du site + contact affiché en bas du guide.
+const GUIDE_SITE_URL = '[ton lien]';
+const GUIDE_CONTACT = 'lucas.bisignano88@gmail.com';
+
 // ── Connexion ─────────────────────────────────────────────────
 function AdminLogin() {
   const { setAuth, navigate } = useApp();
@@ -126,6 +131,7 @@ function AdminDash() {
           <Btn block size="lg" variant="soft" icon="sparkle" onClick={() => navigate('admin-pricing')}>Mes tarifs</Btn>
           <Btn block size="lg" variant="soft" icon="grid" onClick={() => navigate('admin-gallery')}>Mes photos</Btn>
         </div>
+        <Btn block size="lg" variant="ghost" onClick={() => navigate('admin-guide')}>📖 Mode d’emploi</Btn>
         <p className="dash-hint"><Icon name="sparkle" size={14} /> Publie le concours où tu seras, il apparaît aussitôt sur ton site, prêt à recevoir des réservations.</p>
 
         <div className="dash-sectitle"><span>Ma présentation</span><i></i></div>
@@ -152,6 +158,56 @@ function AdminDash() {
         <ChangePassword />
 
         <button className="foot-admin" style={{ margin: '8px auto 0' }} onClick={resetDemo}>Réinitialiser la démo</button>
+      </div>
+    </Screen>
+  );
+}
+
+// ── Mode d'emploi (guide privé, derrière la connexion) ────────
+function AdminGuide() {
+  const { navigate } = useApp();
+  const txt = { margin: 0, color: 'var(--ink)', fontSize: 14.5, lineHeight: 1.65 };
+  const muted = { margin: 0, color: 'var(--muted)', fontSize: 13.5, lineHeight: 1.6 };
+  const isLink = /^https?:\/\//i.test(GUIDE_SITE_URL);
+  return (
+    <Screen title="Mode d’emploi" onBack={() => navigate('admin-dash')}>
+      <div className="pedit-intro">
+        <span className="eyebrow">Rien que pour toi</span>
+        <h2 className="recap-name">Mode d’emploi de ton site 📸</h2>
+        <p className="pedit-lead">Bienvenue ! Voici comment ton site fonctionne, en deux minutes.</p>
+      </div>
+
+      <div className="dash-sectitle"><span>1 · Comment tu reçois tes réservations</span><i></i></div>
+      <div className="pedit-card">
+        <p style={txt}>Quand quelqu’un remplit le formulaire de réservation, tu reçois automatiquement un email sur <a href="mailto:melaniedubois@live.fr">melaniedubois@live.fr</a> avec toutes les infos de la demande (nom, cheval, concours, contact…). Ta boîte mail centralise tout : tu ne rates aucune demande. De son côté, la personne voit un message «&nbsp;C’est réservé&nbsp;!&nbsp;» qui confirme l’envoi.</p>
+      </div>
+
+      <div className="dash-sectitle"><span>2 · Ton espace photographe</span><i></i></div>
+      <div className="pedit-card">
+        <p style={txt}>C’est ici même, l’espace privé de ton site (accessible tout en bas de la page d’accueil).</p>
+        <ul style={{ margin: '2px 0 0', paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <li style={txt}>Mot de passe : <strong>bouboule</strong></li>
+          <li style={txt}>Tu peux le changer quand tu veux, dans la section «&nbsp;Sécurité&nbsp;».</li>
+        </ul>
+        <p style={muted}>Astuce : ce mot de passe est mémorisé sur l’appareil que tu utilises ; sur un autre ordinateur ou téléphone, il te sera redemandé.</p>
+      </div>
+
+      <div className="dash-sectitle"><span>3 · Modifier tes infos (photos, présentation, tarifs, numéro…)</span><i></i></div>
+      <div className="pedit-card">
+        <p style={txt}>Pour changer une photo, ta présentation, tes tarifs ou ton numéro, envoie-moi simplement un message avec ce que tu veux modifier — je m’en occupe rapidement.</p>
+      </div>
+
+      <div className="dash-sectitle"><span>4 · L’adresse de ton site</span><i></i></div>
+      <div className="pedit-card">
+        <p style={txt}>Ton site est en ligne ici : {isLink
+          ? <a href={GUIDE_SITE_URL} target="_blank" rel="noopener noreferrer">{GUIDE_SITE_URL}</a>
+          : <strong>{GUIDE_SITE_URL}</strong>}</p>
+        <p style={txt}>Si tu veux une adresse à ton nom (par ex. melaniedubois.photo), dis-le moi, je m’en charge.</p>
+      </div>
+
+      <div className="pedit-card" style={{ marginTop: 4 }}>
+        <p style={txt}>Une question ? Écris-moi à tout moment.</p>
+        <p style={txt}>Lucas — <a href={'mailto:' + GUIDE_CONTACT}>{GUIDE_CONTACT}</a></p>
       </div>
     </Screen>
   );
@@ -591,4 +647,4 @@ function AdminNew() {
   );
 }
 
-Object.assign(window, { AdminLogin, AdminDash, AdminEvent, AdminNew, AdminPricing, AdminGallery, StatusToggle, BookingRow, ADMIN_STATUS });
+Object.assign(window, { AdminLogin, AdminDash, AdminEvent, AdminNew, AdminPricing, AdminGallery, AdminGuide, StatusToggle, BookingRow, ADMIN_STATUS });
