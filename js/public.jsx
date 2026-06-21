@@ -247,6 +247,7 @@ function Footer() {
       <p className="foot-tag">Photographe équestre, concours de saut, dressage &amp; complet, partout en région.</p>
       <div className="foot-links">
         <a href={IG} target="_blank" rel="noopener noreferrer"><Icon name="instagram" size={18} /> Instagram</a>
+        <a href="tel:+33689938157"><Icon name="phone" size={18} /> 06 89 93 81 57</a>
         <a href="#" onClick={(e) => e.preventDefault()}><Icon name="mail" size={18} /> Écris-moi</a>
         <button onClick={() => navigate('pricing')}><Icon name="sparkle" size={18} /> Tarifs</button>
       </div>
