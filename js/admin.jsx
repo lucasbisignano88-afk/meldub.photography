@@ -22,9 +22,9 @@ const setAdminPw = (v) => {
 };
 
 // ── Mode d'emploi (guide privé pour la photographe) ───────────
-// À compléter par Lucas : adresse en ligne du site + contact affiché en bas du guide.
-const GUIDE_SITE_URL = '[ton lien]';
-const GUIDE_CONTACT = 'lucas.bisignano88@gmail.com';
+// Adresse en ligne du site + email de contact affiché en bas du guide.
+const GUIDE_SITE_URL = '[COLLE TON URL ICI]';
+const GUIDE_CONTACT = 'melaniedubois@live.fr';
 
 // ── Connexion ─────────────────────────────────────────────────
 function AdminLogin() {
@@ -194,7 +194,7 @@ function AdminGuide() {
 
       <div className="dash-sectitle"><span>3 · Modifier tes infos (photos, présentation, tarifs, numéro…)</span><i></i></div>
       <div className="pedit-card">
-        <p style={txt}>Pour changer une photo, ta présentation, tes tarifs ou ton numéro, envoie-moi simplement un message avec ce que tu veux modifier — je m’en occupe rapidement.</p>
+        <p style={txt}>Pour modifier une info (photo, présentation, tarifs, numéro), contacte la personne qui gère ton site — c’est fait rapidement.</p>
       </div>
 
       <div className="dash-sectitle"><span>4 · L’adresse de ton site</span><i></i></div>
@@ -206,8 +206,8 @@ function AdminGuide() {
       </div>
 
       <div className="pedit-card" style={{ marginTop: 4 }}>
-        <p style={txt}>Une question ? Écris-moi à tout moment.</p>
-        <p style={txt}>Lucas — <a href={'mailto:' + GUIDE_CONTACT}>{GUIDE_CONTACT}</a></p>
+        <p style={txt}>Une question ? Le contact de ton site :</p>
+        <p style={txt}><a href={'mailto:' + GUIDE_CONTACT}>{GUIDE_CONTACT}</a></p>
       </div>
     </Screen>
   );
