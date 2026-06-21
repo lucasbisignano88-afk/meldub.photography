@@ -8,6 +8,19 @@ const ADMIN_STATUS = [
   { key: 'sent',      short: 'Envoyées', tone: 'done' },
 ];
 
+// ── Mot de passe de l'espace photographe ──────────────────────
+// Par défaut "bouboule" ; remplacé par celui enregistré dans localStorage
+// dès que la photographe le change depuis son tableau de bord.
+const ADMIN_PW_KEY = 'mel-admin-pw';
+const DEFAULT_ADMIN_PW = 'bouboule';
+const getAdminPw = () => {
+  try { return localStorage.getItem(ADMIN_PW_KEY) || DEFAULT_ADMIN_PW; }
+  catch (e) { return DEFAULT_ADMIN_PW; }
+};
+const setAdminPw = (v) => {
+  try { localStorage.setItem(ADMIN_PW_KEY, v); } catch (e) {}
+};
+
 // ── Connexion ─────────────────────────────────────────────────
 function AdminLogin() {
   const { setAuth, navigate } = useApp();
@@ -15,6 +28,7 @@ function AdminLogin() {
   const [err, setErr] = useState('');
   const submit = () => {
     if (pw.trim().length === 0) { setErr('Entre ton mot de passe.'); return; }
+    if (pw !== getAdminPw()) { setErr('Mot de passe incorrect.'); return; }
     setAuth(true);
     navigate('admin-dash');
   };
@@ -29,9 +43,33 @@ function AdminLogin() {
                  type="password" placeholder="••••••••" icon="lock" error={err} autoFocus />
           <Btn block size="lg" type="submit" iconRight="arrow">Me connecter</Btn>
         </form>
-        <p className="login-demo mono">démo : n’importe quel mot de passe fonctionne</p>
       </div>
     </Screen>
+  );
+}
+
+// ── Changer le mot de passe (visible une fois connectée) ──────
+function ChangePassword() {
+  const [pw, setPw] = useState('');
+  const [saved, setSaved] = useState(false);
+  const save = () => {
+    const v = pw.trim();
+    if (!v) return;
+    setAdminPw(v);
+    setPw('');
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2400);
+  };
+  return (
+    <div className="pedit-card">
+      <Field label="Nouveau mot de passe" value={pw} onChange={(v) => { setPw(v); setSaved(false); }}
+             type="password" placeholder="••••••••" icon="lock"
+             hint="Tu l’utiliseras à ta prochaine connexion." />
+      <Btn block icon={saved ? 'check' : 'lock'} onClick={save} disabled={!pw.trim()}>
+        {saved ? 'Mot de passe enregistré' : 'Enregistrer le mot de passe'}
+      </Btn>
+      {saved && <span className="pedit-saved"><Icon name="check" size={14} /> Mot de passe mis à jour</span>}
+    </div>
   );
 }
 
@@ -109,6 +147,9 @@ function AdminDash() {
             <div className="dash-list">{archived.map(eventCard)}</div>
           </React.Fragment>
         )}
+
+        <div className="dash-sectitle"><span>Sécurité</span><i></i></div>
+        <ChangePassword />
 
         <button className="foot-admin" style={{ margin: '8px auto 0' }} onClick={resetDemo}>Réinitialiser la démo</button>
       </div>
